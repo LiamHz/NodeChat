@@ -9,6 +9,5 @@
   },
   "scripts": {
     "start": "node index.js"
-  },
-  "ejs": "0.8.5"
+  }
 }
