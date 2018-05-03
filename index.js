@@ -1,8 +1,11 @@
 var app = require("express")();
 var http = require("http").Server(app);
+var path = require("path");
 var io = require ("socket.io")(http);
 
 app.set('port', (process.env.PORT || 5000));
+
+app.set('views', path.join(__dirname, 'views'));
 
 app.get("/", function(req, res){
   res.sendFile(__dirname + "/views/pages/index.html");
