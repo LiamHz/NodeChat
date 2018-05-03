@@ -3,7 +3,7 @@ var http = require("http").Server(app);
 var path = require("path");
 var io = require ("socket.io")(http);
 
-app.set('port', (process.env.PORT || 5000));
+app
 
 app.set('views', path.join(__dirname, 'views'));
 
@@ -24,6 +24,4 @@ io.on("connection", function(socket){
   });
 });
 
-http.listen(3000, function(){
-  console.log("listening on *:3000");
-});
+http.listen('port', (process.env.PORT || 5000));
