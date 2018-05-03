@@ -1,8 +1,12 @@
+var express = require("express");
 var app = require("express")();
 var http = require("http").Server(app);
 var path = require("path");
 var io = require ("socket.io")(http);
 var PORT = process.env.PORT || 3000;
+
+// Allows use of stylesheets
+app.use(express.static(__dirname + '/public'));
 
 app.set('views', path.join(__dirname, 'views'));
 
