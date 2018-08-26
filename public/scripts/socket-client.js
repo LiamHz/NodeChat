@@ -2,10 +2,9 @@ $(function(){
     var socket = io();
 
     $("form").submit(function(){
-      // Determine user intent by message content
-
         msg = $("#m").val()
 
+        // Determine user intent by message content
         if(msg.includes("/register")){
             intent = "register";
         }else{
@@ -17,21 +16,24 @@ $(function(){
         return false;
     });
 
+    // Send the new user the previous chat history
     socket.on("chatLog", function(chatLog){
         for(var i=0; i < chatLog.length; i++){
             $("#messages").append($("<li>").text(chatLog[i]))
         }
     })
 
+    // Notify user when another user joins chat
     socket.on("user connected", function(){
         $("#messages").append($("<li>").text("* a user connected *").css("font-weight", "Bold"));
     });
 
+    // Notify user when they sucessfully register
     socket.on("register", function(user){
-        console.log("FAQ");
-        $("#messages").append($("<li>").text("* you are now registered as " + user + "*").css("font-weight", "Bold"));
+        $("#messages").append($("<li>").text("* you are now registered as " + user + " *").css("font-weight", "Bold"));
     });
 
+    // Add new messages to users display
     socket.on("message", function(msg){
         $("#messages").append($("<li>").text(msg));
     });
