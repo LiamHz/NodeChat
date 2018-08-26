@@ -15,12 +15,15 @@ app.get("/", function(req, res){
     res.sendFile(__dirname + "/views/pages/index.html");
 });
 
+var chatLog = []
 
 io.on("connect", function(socket){
-    console.log("a user connected");
+
+    socket.emit("chatLog", chatLog);
 
     // Notify all users except for the user who joined
-    socket.broadcast.emit("user connected")
+    socket.broadcast.emit("user connected");
+    console.log("a user connected");
 
     socket.on("register", function(input){
         user = input.substring(10);
@@ -31,6 +34,10 @@ io.on("connect", function(socket){
 
     socket.on("message", function(msg){
         console.log("message: " + msg);
+
+        // Add message to chat log
+        chatLog.push(msg)
+
         // When a user sends a message, broadcast the message to all users
         io.emit("message", msg);
     });

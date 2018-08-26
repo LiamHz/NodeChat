@@ -17,6 +17,12 @@ $(function(){
         return false;
     });
 
+    socket.on("chatLog", function(chatLog){
+        for(var i=0; i < chatLog.length; i++){
+            $("#messages").append($("<li>").text(chatLog[i]))
+        }
+    })
+
     socket.on("user connected", function(){
         $("#messages").append($("<li>").text("* a user connected *").css("font-weight", "Bold"));
     });
