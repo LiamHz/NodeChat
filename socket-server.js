@@ -25,7 +25,7 @@ io.on("connect", function(socket){
     socket.on("register", function(input){
         user = input.substring(10);
 
-        socket.emit("r", user);
+        socket.emit("register", user);
         console.log("new user registered: " + user);
     });
 
