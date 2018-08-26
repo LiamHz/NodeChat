@@ -2,49 +2,7 @@
 <html>
   <head>
     <title>NodeChat</title>
-    <style>
-        * {
-          margin: 0; padding: 0; box-sizing: border-box;
-        }
-        body {
-          font: 16px Helvetica, Arial;
-          background-color: #333;
-        }
-        form {
-          padding: 3px;
-          position: fixed;
-          bottom: 0;
-          width: 100%;
-        }
-        form input {
-          border: 0;
-          padding: 10px;
-          width: 90%;
-          margin-right: .5%;
-          border: 2px solid white;
-          background: #222;
-          color: #fff
-        }
-        form button {
-          width: 9%;
-          background: #111;
-          border: none;
-          padding: 10px;
-          border: 2px solid white;
-          color: #fff
-        }
-        #messages {
-          list-style-type: none; margin-bottom: 3%; padding: 0;
-        }
-        #messages li {
-          padding: 5px 10px;
-          background:#111;
-          color: #fff;
-        }
-        #messages li:nth-child(odd) {
-          background: #333;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="/styles/index.css">
   </head>
   <body>
     <ul id="messages"></ul>
@@ -67,6 +25,10 @@
         socket.on("chat message", function(msg){
           $("#messages").append($("<li>").text(msg));
         });
+
+        socket.on("user connected", function(){
+            $("#messages").append($("<li>").text("* a user connected *").css("font-weight", "Bold"))
+        })
       })
     </script>
   </body>
