@@ -12,24 +12,6 @@
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
-    <script>
-      $(function(){
-        var socket = io();
-
-        $("form").submit(function(){
-          socket.emit("chat message", $("#m").val());
-          $("#m").val("");
-          return false;
-        });
-
-        socket.on("chat message", function(msg){
-          $("#messages").append($("<li>").text(msg));
-        });
-
-        socket.on("user connected", function(){
-            $("#messages").append($("<li>").text("* a user connected *").css("font-weight", "Bold"))
-        })
-      })
-    </script>
+    <script src="/scripts/socket-client.js"></script>
   </body>
 </html>
