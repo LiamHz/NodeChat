@@ -21,9 +21,9 @@ $(function(){
     // Send the new user the previous chat history
     socket.on("chatLog", function(chatLog){
         for(var i=0; i < chatLog.length; i++){
-            $("#messages").append($("<li>").text(chatLog[i]))
+            $("#messages").append($("<li>").text(chatLog[i]));
         }
-    })
+    });
 
     // Notify user when another user joins chat
     socket.on("user connected", function(){
@@ -31,13 +31,17 @@ $(function(){
     });
 
     // Notify user when they sucessfully register
-    socket.on("register", function(user){
-        $("#messages").append($("<li>").text("* you are now registered as " + user + " *").css("font-weight", "Bold"));
+    socket.on("register", function(username){
+        $("#messages").append($("<li>").text("* you are now registered as " + username + " *").css("font-weight", "Bold"));
     });
 
-    socket.on("register InvalidNumArgs", function(){
-        $("#messages").append($("<li>").text("* registration failed, use command: *").css("font-weight", "Bold"))
-        $("#messages").append($("<li>").text("* /register USERNAME PASSWORD *").css("font-weight", "Bold"))
+    socket.on("registerError InvalidNumArgs", function(){
+        $("#messages").append($("<li>").text("* registration failed, use command: *").css("font-weight", "Bold"));
+        $("#messages").append($("<li>").text("* /register USERNAME PASSWORD *").css("font-weight", "Bold"));
+    });
+
+    socket.on("registerError UsernameInUse", function(username){
+        $("#messages").append($("<li>").text("* registration failed, username: " + username + " is already in use *").css("font-weight", "Bold"));
     });
 
     // Add new messages to users display

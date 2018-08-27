@@ -16,6 +16,7 @@ app.get("/", function(req, res){
 });
 
 var chatLog = []
+registeredUsers = {}
 
 io.on("connect", function(socket){
 
@@ -32,18 +33,24 @@ io.on("connect", function(socket){
             username = inputs[1]
             password = inputs[2]
 
-            socket.emit("register", username);
-            console.log("new user registered: " + username);
-            console.log("with password: " + password);
+            // If the username is not already registered, register it
+            if(!(username in registeredUsers)){
+                registeredUsers[username] = password
+
+                socket.emit("register", username);
+                console.log("new user registered: " + username);
+            }else{
+                socket.emit("registerError UsernameInUse", username)
+            }
         }else{
-            socket.emit("register InvalidNumArgs")
+            socket.emit("registerError InvalidNumArgs")
             console.log("Registration failed: expected 2 arguments, recieved " + (inputs.length - 1))
         }
     });
 
-    socket.on("login", function(input){
-
-    });
+    // socket.on("login", function(input){
+    //
+    // });
 
     socket.on("message", function(msg){
         console.log("message: " + msg);
