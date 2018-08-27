@@ -7,6 +7,8 @@ $(function(){
         // Determine user intent by message content
         if(msg.includes("/register")){
             intent = "register";
+        }else if(msg.includes("/login")){
+            intent = "login"
         }else{
             intent = "message";
         }
@@ -31,6 +33,11 @@ $(function(){
     // Notify user when they sucessfully register
     socket.on("register", function(user){
         $("#messages").append($("<li>").text("* you are now registered as " + user + " *").css("font-weight", "Bold"));
+    });
+
+    socket.on("register InvalidNumArgs", function(){
+        $("#messages").append($("<li>").text("* registration failed, use command: *").css("font-weight", "Bold"))
+        $("#messages").append($("<li>").text("* /register USERNAME PASSWORD *").css("font-weight", "Bold"))
     });
 
     // Add new messages to users display

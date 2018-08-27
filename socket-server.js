@@ -23,13 +23,26 @@ io.on("connect", function(socket){
 
     // Notify all users except for the user who joined
     socket.broadcast.emit("user connected");
-    console.log("a user connected");
+    console.log("a user connected")
 
     socket.on("register", function(input){
-        user = input.substring(10);
+        inputs = input.split(" ")
 
-        socket.emit("register", user);
-        console.log("new user registered: " + user);
+        if(inputs.length == 3){
+            username = inputs[1]
+            password = inputs[2]
+
+            socket.emit("register", username);
+            console.log("new user registered: " + username);
+            console.log("with password: " + password);
+        }else{
+            socket.emit("register InvalidNumArgs")
+            console.log("Registration failed: expected 2 arguments, recieved " + (inputs.length - 1))
+        }
+    });
+
+    socket.on("login", function(input){
+
     });
 
     socket.on("message", function(msg){
