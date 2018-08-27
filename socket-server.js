@@ -52,14 +52,14 @@ io.on("connect", function(socket){
     //
     // });
 
-    socket.on("message", function(msg){
+    socket.on("message", function(msg, username){
         console.log("message: " + msg);
 
         // Add message to chat log
         chatLog.push(msg)
 
         // When a user sends a message, broadcast the message to all users
-        io.emit("message", msg);
+        io.emit("message", msg, username);
     });
 
     socket.on("disconnect", function(){

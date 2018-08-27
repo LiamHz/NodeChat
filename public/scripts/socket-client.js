@@ -1,19 +1,21 @@
 $(function(){
     var socket = io();
 
+    var USERNAME = "guest"
+
     $("form").submit(function(){
-        msg = $("#m").val()
+        input = $("#m").val()
 
         // Determine user intent by message content
-        if(msg.includes("/register")){
+        if(input.includes("/register")){
             intent = "register";
-        }else if(msg.includes("/login")){
+        }else if(input.includes("/login")){
             intent = "login"
         }else{
             intent = "message";
         }
 
-        socket.emit(intent, msg);
+        socket.emit(intent, input, USERNAME);
         $("#m").val("");
         return false;
     });
@@ -33,6 +35,7 @@ $(function(){
     // Notify user when they sucessfully register
     socket.on("register", function(username){
         $("#messages").append($("<li>").text("* you are now registered as " + username + " *").css("font-weight", "Bold"));
+        USERNAME = username
     });
 
     socket.on("registerError InvalidNumArgs", function(){
@@ -45,8 +48,8 @@ $(function(){
     });
 
     // Add new messages to users display
-    socket.on("message", function(msg){
-        $("#messages").append($("<li>").text(msg));
+    socket.on("message", function(msg, username){
+        $("#messages").append($("<li class='" + username + "'>").text(msg + " - " + username));
     });
 
     socket.on("error", function(err){
