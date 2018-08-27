@@ -48,9 +48,25 @@ io.on("connect", function(socket){
         }
     });
 
-    // socket.on("login", function(input){
-    //
-    // });
+    socket.on("login", function(input){
+        inputs = input.split(" ")
+        username = inputs[1]
+        password = inputs[2]
+
+        // If user exists
+        if(username in registeredUsers){
+            // Check if credentials match
+            if(registeredUsers[username] == password){
+                // Login user
+                console.log("Authentication sucessful!")
+                socket.emit("login", username)
+            }else{
+                console.log("Invalid authentication credentials provided")
+            }
+        }else{
+            console.log("No such user exists")
+        }
+    });
 
     socket.on("message", function(msg, username){
         console.log("message: " + msg);

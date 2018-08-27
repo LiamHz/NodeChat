@@ -29,27 +29,36 @@ $(function(){
 
     // Notify user when another user joins chat
     socket.on("user connected", function(){
-        $("#messages").append($("<li>").text("* a user connected *").css("font-weight", "Bold"));
+        $("#messages").append($("<li class='system'>").text("* a user connected *").css("font-weight", "Bold"));
     });
 
     // Notify user when they sucessfully register
     socket.on("register", function(username){
-        $("#messages").append($("<li>").text("* you are now registered as " + username + " *").css("font-weight", "Bold"));
+        $("#messages").append($("<li class='system'>").text("* you are now registered as " + username + " *").css("font-weight", "Bold"));
         USERNAME = username
     });
 
     socket.on("registerError InvalidNumArgs", function(){
-        $("#messages").append($("<li>").text("* registration failed, use command: *").css("font-weight", "Bold"));
-        $("#messages").append($("<li>").text("* /register USERNAME PASSWORD *").css("font-weight", "Bold"));
+        $("#messages").append($("<li class='system'>").text("* registration failed, use command: *").css("font-weight", "Bold"));
+        $("#messages").append($("<li class='system'>").text("* /register USERNAME PASSWORD *").css("font-weight", "Bold"));
     });
 
     socket.on("registerError UsernameInUse", function(username){
-        $("#messages").append($("<li>").text("* registration failed, username: " + username + " is already in use *").css("font-weight", "Bold"));
+        $("#messages").append($("<li class='system'>").text("* registration failed, username: " + username + " is already in use *").css("font-weight", "Bold"));
+    });
+
+    socket.on("login", function(username){
+        USERNAME = username;
     });
 
     // Add new messages to users display
     socket.on("message", function(msg, username){
-        $("#messages").append($("<li class='" + username + "'>").text(msg + " - " + username));
+        // If the message's sender is diferent than the previous sender
+        // Add their name above their username to their message
+        if(!($("li:last").attr("class") == username)){
+            $("#messages").append($("<li class='" + username + "'>").text(username).css("font-weight", "Bold"));
+        }
+        $("#messages").append($("<li class='" + username + "'>").text(msg));
     });
 
     socket.on("error", function(err){
