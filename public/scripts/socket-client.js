@@ -5,6 +5,7 @@ $(function(){
 
     $("form").submit(function(){
         input = $("#m").val()
+        newSender = false
 
         // Determine user intent by message content
         if(input.includes("/register")){
@@ -13,9 +14,14 @@ $(function(){
             intent = "login"
         }else{
             intent = "message";
+            // If the message's sender is diferent than the previous sender
+            // Add their name above their username to their message
+            if(!($("li:last").attr("class") == USERNAME)){
+                newSender = true
+            }
         }
 
-        socket.emit(intent, input, USERNAME);
+        socket.emit(intent, input, USERNAME, newSender);
         $("#m").val("");
         return false;
     });
@@ -23,7 +29,14 @@ $(function(){
     // Send the new user the previous chat history
     socket.on("chatLog", function(chatLog){
         for(var i=0; i < chatLog.length; i++){
-            $("#messages").append($("<li>").text(chatLog[i]));
+            // New senders are always preceeded by a blank line
+            if(chatLog[i] == ""){
+                $("#messages").append($("<li>").text(chatLog[i]));
+                i++
+                $("#messages").append($("<li class='newSender'>").text(chatLog[i]));
+            }else{
+                $("#messages").append($("<li>").text(chatLog[i]));
+            }
         }
     });
 
@@ -52,13 +65,12 @@ $(function(){
     });
 
     // Add new messages to users display
-    socket.on("message", function(msg, username){
-        // If the message's sender is diferent than the previous sender
-        // Add their name above their username to their message
-        if(!($("li:last").attr("class") == username)){
+    socket.on("message", function(msg, username, newSender){
+        if(newSender){
             $("#messages").append($("<li class='" + username + "'>").text(username).css("font-weight", "Bold"));
+        }else{
+            $("#messages").append($("<li class='" + username + "'>").text(msg));
         }
-        $("#messages").append($("<li class='" + username + "'>").text(msg));
     });
 
     socket.on("error", function(err){

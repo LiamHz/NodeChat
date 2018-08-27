@@ -68,14 +68,22 @@ io.on("connect", function(socket){
         }
     });
 
-    socket.on("message", function(msg, username){
+    socket.on("message", function(msg, username, newSender){
+        if(newSender){
+            console.log("Sender: " + username)
+            chatLog.push("")
+            chatLog.push(username)
+            io.emit("message", "", "system", false)
+            io.emit("message", username, username, true)
+        }
+
         console.log("message: " + msg);
 
         // Add message to chat log
         chatLog.push(msg)
 
         // When a user sends a message, broadcast the message to all users
-        io.emit("message", msg, username);
+        io.emit("message", msg, username, false);
     });
 
     socket.on("disconnect", function(){
