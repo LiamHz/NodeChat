@@ -15,6 +15,7 @@ app.get("/", function(req, res){
     res.sendFile(__dirname + "/views/pages/index.html");
 });
 
+var guestID = 1
 var chatLog = []
 registeredUsers = {}
 var helpInfo = ["Register a new account", "/register USERNAME PASSWORD", "", "Login to existing account", "/login USERNAME PASSWORD", ""]
@@ -23,6 +24,8 @@ io.on("connect", function(socket){
 
     socket.emit("chatLog", chatLog);
     socket.emit("explainHelp");
+    socket.emit("registerGuest", guestID)
+    guestID++
 
     // Notify all users except for the user who joined
     socket.broadcast.emit("user connected");

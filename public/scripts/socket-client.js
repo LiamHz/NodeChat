@@ -89,6 +89,11 @@ $(document).ready(function(){
 
 
     // Registration
+    socket.on("registerGuest", function(guestID){
+        USERNAME = ("guest" + guestID)
+        $("#username").text("Username: " + USERNAME);
+    });
+
     socket.on("register", function(username){
         $("#messages").append($("<li class='system'>").text(""))
         $("#messages").append($("<li class='system'>").text("You are now registered as " + username + ""))
