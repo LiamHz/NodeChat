@@ -7,7 +7,6 @@
 body {
   font-family: Helvetica, Arial;
   font-size: 1em;
-  background-color: #333;
 }
 
 form {
@@ -60,4 +59,11 @@ form button {
 
 .form {
     text-align: center;
+}
+
+input[type='text'],
+input[type='number'],
+select:focus,
+textarea {
+  font-size: 16px;
 }
