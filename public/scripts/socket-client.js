@@ -58,6 +58,14 @@ $(document).ready(function(){
 
     // Help info
     socket.on("explainHelp", function(){
+        // Explain help will be hidden behind the usename display without this code
+        if ($(window).width() < 800){
+            i = 1
+            while(i <= 4){
+                $("#messages").append($("<li class='system'>").text(""))
+                i++
+            }
+        }
         $("#messages").append($("<li class='system'>").text(""))
         $("#messages").append($("<li class='system'>").text("Type /help to learn the different chat commands"));
         $("#messages").append($("<li class='system'>").text(""))

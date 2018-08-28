@@ -85,7 +85,7 @@ form input {
   }
 }
 
-@media only screen and (max-width: 600px){
+@media only screen and (max-width: 800px){
     #username-container{
         top: 0;
         left: 0;
