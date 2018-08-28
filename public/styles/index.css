@@ -1,5 +1,7 @@
 * {
-  margin: 0; padding: 0; box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
@@ -26,6 +28,7 @@ form input {
   background: #222;
   color: #fff
 }
+
 form button {
   width: 20%;
   background: #111;
@@ -34,10 +37,13 @@ form button {
   border: 2px solid white;
   color: #fff
 }
+
 #messages {
   list-style-type: none;
   padding: 0;
+  margin-bottom: 5em;
 }
+
 #messages li {
   padding: 5px 10px;
   /* background:#111; */
