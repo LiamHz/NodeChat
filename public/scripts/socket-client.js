@@ -1,8 +1,9 @@
-$(function(){
+$(document).ready(function(){
     var socket = io();
 
     var USERNAME = "guest";
 
+    $("#username").text("Username: " + USERNAME);
 
     // User input
     $("form").submit(function(){
@@ -92,7 +93,9 @@ $(function(){
         $("#messages").append($("<li class='system'>").text(""))
         $("#messages").append($("<li class='system'>").text("You are now registered as " + username + ""))
         $("#messages").append($("<li class='system'>").text(""))
+
         USERNAME = username
+        $("#username").text("Username: " + USERNAME);
 
         // Scroll to bottom of page
         window.scrollBy(0, 9001);
@@ -123,7 +126,9 @@ $(function(){
         $("#messages").append($("<li class='system'>").text(""))
         $("#messages").append($("<li class='system'>").text("You are now logged in as " + username))
         $("#messages").append($("<li class='system'>").text(""))
+
         USERNAME = username;
+        $("#username").text("Username: " + USERNAME);
 
         // Scroll to bottom of page
         window.scrollBy(0, 9001);
