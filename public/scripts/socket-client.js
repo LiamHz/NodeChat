@@ -1,14 +1,20 @@
 $(function(){
     var socket = io();
 
-    var USERNAME = "guest"
+    var USERNAME = "guest";
 
     $("form").submit(function(){
-        input = $("#m").val()
-        newSender = false
+        input = $("#m").val();
+        newSender = false;
+
+        input = input.trim();
+        console.log("^" + input + "^");
 
         // Determine user intent by message content
-        if(input.includes("/register")){
+        if(input == ""){
+            $("#m").val("");
+            return false;
+        }else if(input.includes("/register")){
             intent = "register";
         }else if(input.includes("/login")){
             intent = "login"
@@ -38,6 +44,9 @@ $(function(){
                 $("#messages").append($("<li>").text(chatLog[i]));
             }
         }
+
+        // Scroll to bottom of page
+        window.scrollBy(0, 9001);
     });
 
     // Notify user when another user joins chat
@@ -71,6 +80,10 @@ $(function(){
         }else{
             $("#messages").append($("<li class='" + username + "'>").text(msg));
         }
+
+        // Scroll to bottom of page
+        window.scrollBy(0, 9001);
+        console.log("SCROLL")
     });
 
     socket.on("error", function(err){

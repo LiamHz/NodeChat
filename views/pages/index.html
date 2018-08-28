@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>NodeChat</title>
-    <link rel="stylesheet" type="text/css" href="/styles/index.css">
-  </head>
-  <body>
-    <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" />
-      <button>Send</button>
-    </form>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
-    <script src="/scripts/socket-client.js"></script>
-  </body>
+    <head>
+        <title>NodeChat</title>
+        <link rel="stylesheet" type="text/css" href="/styles/index.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    </head>
+    <body>
+        <ul id="messages"></ul>
+        <div class="form">
+            <form action="">
+                <input id="m" autocomplete="off" />
+                <button>Send</button>
+            </form>
+        </div>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+        <script src="/scripts/socket-client.js"></script>
+    </body>
 </html>
