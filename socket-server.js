@@ -17,10 +17,12 @@ app.get("/", function(req, res){
 
 var chatLog = []
 registeredUsers = {}
+var helpInfo = ["Register a new account", "/register USERNAME PASSWORD", "", "Login to existing account", "/login USERNAME PASSWORD", ""]
 
 io.on("connect", function(socket){
 
     socket.emit("chatLog", chatLog);
+    socket.emit("explainHelp");
 
     // Notify all users except for the user who joined
     socket.broadcast.emit("user connected");
@@ -53,24 +55,28 @@ io.on("connect", function(socket){
         username = inputs[1]
         password = inputs[2]
 
-        // If user exists
-        if(username in registeredUsers){
-            // Check if credentials match
-            if(registeredUsers[username] == password){
-                // Login user
-                console.log("Authentication sucessful!")
-                socket.emit("login", username)
+        if(inputs.length == 3){
+            // If user exists
+            if(username in registeredUsers){
+                // Check if credentials match
+                if(registeredUsers[username] == password){
+                    // Login user
+                    socket.emit("login", username)
+                }else{
+                    socket.emit("loginError auth")
+                }
             }else{
-                console.log("Invalid authentication credentials provided")
+                socket.emit("loginError exist", username)
             }
         }else{
-            console.log("No such user exists")
+            socket.emit("loginError InvalidNumArgs")
+            console.log("Loginfailed: expected 2 arguments, recieved " + (inputs.length - 1))
         }
     });
 
     socket.on("message", function(msg, username, newSender){
         if(newSender){
-            console.log("Sender: " + username)
+            console.log("sender: " + username)
             chatLog.push("")
             chatLog.push(username)
             io.emit("message", "", "system", false)
@@ -84,6 +90,11 @@ io.on("connect", function(socket){
 
         // When a user sends a message, broadcast the message to all users
         io.emit("message", msg, username, false);
+    });
+
+    socket.on("help", function(){
+        console.log("sending help info");
+        socket.emit("helpInfo", helpInfo);
     });
 
     socket.on("disconnect", function(){

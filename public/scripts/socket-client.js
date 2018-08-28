@@ -3,12 +3,13 @@ $(function(){
 
     var USERNAME = "guest";
 
+
+    // User input
     $("form").submit(function(){
         input = $("#m").val();
         newSender = false;
 
         input = input.trim();
-        console.log("^" + input + "^");
 
         // Determine user intent by message content
         if(input == ""){
@@ -18,6 +19,8 @@ $(function(){
             intent = "register";
         }else if(input.includes("/login")){
             intent = "login"
+        }else if(input.includes("/help")){
+            intent = "help"
         }else{
             intent = "message";
             // If the message's sender is diferent than the previous sender
@@ -32,6 +35,8 @@ $(function(){
         return false;
     });
 
+
+    // ChatLog
     // Send the new user the previous chat history
     socket.on("chatLog", function(chatLog){
         for(var i=0; i < chatLog.length; i++){
@@ -49,31 +54,80 @@ $(function(){
         window.scrollBy(0, 9001);
     });
 
-    // Notify user when another user joins chat
-    socket.on("user connected", function(){
-        $("#messages").append($("<li class='system'>").text("* a user connected *").css("font-weight", "Bold"));
+
+    // Help info
+    socket.on("explainHelp", function(){
+        $("#messages").append($("<li class='system'>").text(""))
+        $("#messages").append($("<li class='system'>").text("Type /help to learn the different chat commands"));
+        $("#messages").append($("<li class='system'>").text(""))
     });
 
-    // Notify user when they sucessfully register
+    socket.on("helpInfo", function(helpInfo){
+        $("#messages").append($("<li class='system'>").text(""))
+        for(var i=0; i < helpInfo.length; i++){
+            $("#messages").append($("<li class='system'>").text(helpInfo[i]));
+        }
+    });
+
+
+    // User joins chat
+    socket.on("user connected", function(){
+        $("#messages").append($("<li class='system'>").text(""))
+        $("#messages").append($("<li class='system'>").text("A user connected"))
+        $("#messages").append($("<li class='system'>").text(""))
+    });
+
+
+    // Registration
     socket.on("register", function(username){
-        $("#messages").append($("<li class='system'>").text("* you are now registered as " + username + " *").css("font-weight", "Bold"));
+        $("#messages").append($("<li class='system'>").text(""))
+        $("#messages").append($("<li class='system'>").text("You are now registered as " + username + ""))
+        $("#messages").append($("<li class='system'>").text(""))
         USERNAME = username
     });
 
     socket.on("registerError InvalidNumArgs", function(){
-        $("#messages").append($("<li class='system'>").text("* registration failed, use command: *").css("font-weight", "Bold"));
-        $("#messages").append($("<li class='system'>").text("* /register USERNAME PASSWORD *").css("font-weight", "Bold"));
+        $("#messages").append($("<li class='system'>").text(""))
+        $("#messages").append($("<li class='system'>").text("Registration failed, use command format"))
+        $("#messages").append($("<li class='system'>").text("/register USERNAME PASSWORD"))
+        $("#messages").append($("<li class='system'>").text(""))
     });
 
     socket.on("registerError UsernameInUse", function(username){
-        $("#messages").append($("<li class='system'>").text("* registration failed, username: " + username + " is already in use *").css("font-weight", "Bold"));
+        $("#messages").append($("<li class='system'>").text(""))
+        $("#messages").append($("<li class='system'>").text("Registration failed, username: " + username + " is already in use"))
+        $("#messages").append($("<li class='system'>").text(""))
     });
 
+
+    // Logins
     socket.on("login", function(username){
+        $("#messages").append($("<li class='system'>").text(""))
+        $("#messages").append($("<li class='system'>").text("You are now logged in as " + username + ""))
+        $("#messages").append($("<li class='system'>").text(""))
         USERNAME = username;
     });
 
-    // Add new messages to users display
+    socket.on("loginError auth", function(){
+        $("#messages").append($("li class='system'>").text(""))
+        $("#messages").append($("<li class='system'>").text("Login failed, invalid password*"))
+        $("#messages").append($("<li class='system'>").text(""))
+    })
+
+    socket.on("loginError exist", function(){
+        $("#messages").append($("li class='system'>").text(""))
+        $("#messages").append($("<li class='system'>").text("Login failed, invalid password*"))
+        $("#messages").append($("<li class='system'>").text(""))
+    })
+
+    socket.on("loginError InvalidNumArgs", function(){
+        $("#messages").append($("li class='system'>").text(""))
+        $("#messages").append($("<li class='system'>").text("Login failed, use command format"))
+        $("#messages").append($("<li class='system'>").text("/login USERNAME PASSWORD"))
+        $("#messages").append($("<li class='system'>").text(""))
+    })
+
+    // Messages
     socket.on("message", function(msg, username, newSender){
         if(newSender){
             $("#messages").append($("<li class='" + username + "'>").text(username).css("font-weight", "Bold"));
