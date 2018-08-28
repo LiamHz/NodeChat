@@ -60,6 +60,9 @@ $(function(){
         $("#messages").append($("<li class='system'>").text(""))
         $("#messages").append($("<li class='system'>").text("Type /help to learn the different chat commands"));
         $("#messages").append($("<li class='system'>").text(""))
+
+        // Scroll to bottom of page
+        window.scrollBy(0, 9001);
     });
 
     socket.on("helpInfo", function(helpInfo){
@@ -67,6 +70,9 @@ $(function(){
         for(var i=0; i < helpInfo.length; i++){
             $("#messages").append($("<li class='system'>").text(helpInfo[i]));
         }
+
+        // Scroll to bottom of page
+        window.scrollBy(0, 9001);
     });
 
 
@@ -75,6 +81,9 @@ $(function(){
         $("#messages").append($("<li class='system'>").text(""))
         $("#messages").append($("<li class='system'>").text("A user connected"))
         $("#messages").append($("<li class='system'>").text(""))
+
+        // Scroll to bottom of page
+        window.scrollBy(0, 9001);
     });
 
 
@@ -84,6 +93,9 @@ $(function(){
         $("#messages").append($("<li class='system'>").text("You are now registered as " + username + ""))
         $("#messages").append($("<li class='system'>").text(""))
         USERNAME = username
+
+        // Scroll to bottom of page
+        window.scrollBy(0, 9001);
     });
 
     socket.on("registerError InvalidNumArgs", function(){
@@ -91,41 +103,59 @@ $(function(){
         $("#messages").append($("<li class='system'>").text("Registration failed, use command format"))
         $("#messages").append($("<li class='system'>").text("/register USERNAME PASSWORD"))
         $("#messages").append($("<li class='system'>").text(""))
+
+        // Scroll to bottom of page
+        window.scrollBy(0, 9001);
     });
 
     socket.on("registerError UsernameInUse", function(username){
         $("#messages").append($("<li class='system'>").text(""))
         $("#messages").append($("<li class='system'>").text("Registration failed, username: " + username + " is already in use"))
         $("#messages").append($("<li class='system'>").text(""))
+
+        // Scroll to bottom of page
+        window.scrollBy(0, 9001);
     });
 
 
     // Logins
     socket.on("login", function(username){
         $("#messages").append($("<li class='system'>").text(""))
-        $("#messages").append($("<li class='system'>").text("You are now logged in as " + username + ""))
+        $("#messages").append($("<li class='system'>").text("You are now logged in as " + username))
         $("#messages").append($("<li class='system'>").text(""))
         USERNAME = username;
+
+        // Scroll to bottom of page
+        window.scrollBy(0, 9001);
     });
 
     socket.on("loginError auth", function(){
-        $("#messages").append($("li class='system'>").text(""))
-        $("#messages").append($("<li class='system'>").text("Login failed, invalid password*"))
         $("#messages").append($("<li class='system'>").text(""))
-    })
+        $("#messages").append($("<li class='system'>").text("Login failed, invalid password"))
+        $("#messages").append($("<li class='system'>").text(""));
 
-    socket.on("loginError exist", function(){
-        $("#messages").append($("li class='system'>").text(""))
-        $("#messages").append($("<li class='system'>").text("Login failed, invalid password*"))
+        // Scroll to bottom of page
+        window.scrollBy(0, 9001);
+    });
+
+    socket.on("loginError exist", function(username){
         $("#messages").append($("<li class='system'>").text(""))
-    })
+        $("#messages").append($("<li class='system'>").text("Login failed, the username" + username + " is not registered"))
+        $("#messages").append($("<li class='system'>").text(""));
+
+        // Scroll to bottom of page
+        window.scrollBy(0, 9001);
+    });
 
     socket.on("loginError InvalidNumArgs", function(){
-        $("#messages").append($("li class='system'>").text(""))
+        $("#messages").append($("<li class='system'>").text(""))
         $("#messages").append($("<li class='system'>").text("Login failed, use command format"))
         $("#messages").append($("<li class='system'>").text("/login USERNAME PASSWORD"))
-        $("#messages").append($("<li class='system'>").text(""))
-    })
+        $("#messages").append($("<li class='system'>").text(""));
+
+        // Scroll to bottom of page
+        window.scrollBy(0, 9001);
+    });
 
     // Messages
     socket.on("message", function(msg, username, newSender){
@@ -137,7 +167,6 @@ $(function(){
 
         // Scroll to bottom of page
         window.scrollBy(0, 9001);
-        console.log("SCROLL")
     });
 
     socket.on("error", function(err){
