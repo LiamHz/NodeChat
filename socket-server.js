@@ -17,31 +17,33 @@ app.get("/", function(req, res){
 
 var guestID = 1
 var chatLog = []
-registeredUsers = {}
+var registeredUsers = {}
 var helpInfo = ["Register a new account", "/register USERNAME PASSWORD", "", "Login to existing account", "/login USERNAME PASSWORD", ""]
-GITHUB_USERNAME = "username"
-GITHUB_PASSWORD = "password"
+var github_username
+var github_password
+
 
 // Read github credentials from file
 var fs = require('fs');
 
 fs.readFile('credentials.txt', 'utf8', function(err, contents) {
     var text = contents.split("\n")
-    text[1] = text[1].substring(0, text[1].length - 2);
-    text[2] = text[2].substring(0, text[2].length - 2);
-    GITHUB_USERNAME = text[1]
-    GITHUB_PASSWORD = text[2]
-});
-
-// Allows posting and getting of Gists
-const Gists = require('gists');
-const gists = new Gists({
-    username: GITHUB_USERNAME
-    password: GITHUB_PASSWORD
+    text[1] = text[1].substring(0, text[1].length - 1);
+    text[2] = text[2].substring(0, text[2].length - 1);
+    github_username = text[1]
+    github_password = text[2]
 });
 
 // Upload chat log to a gist
 function chatLogUpload(chatLog){
+
+    // Allows posting and getting of Gists
+    const Gists = require('gists');
+    const gists = new Gists({
+        username: github_username,
+        password: github_password
+    });
+
     var chatLogGist = {
         "description": "ChatLog",
         "public": false,
@@ -52,11 +54,11 @@ function chatLogUpload(chatLog){
         }
     }
 
+    gists.list("LiamHz");
     gists.create(chatLogGist)
 }
 
 io.on("connect", function(socket){
-
     socket.emit("chatLog", chatLog);
     socket.emit("explainHelp");
     socket.emit("registerGuest", guestID)
@@ -134,7 +136,7 @@ io.on("connect", function(socket){
         console.log("sending help info");
         socket.emit("helpInfo", helpInfo);
 
-        getGithubAuth(authFile)
+
     });
 
     socket.on("disconnect", function(){
