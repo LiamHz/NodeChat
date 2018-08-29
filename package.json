@@ -4,6 +4,7 @@
   "description": "A basic web chat application",
   "dependencies": {
     "express": "^4.16.3",
+    "gists": "^2.0.0",
     "socket.io": "^2.1.1"
   },
   "scripts": {
