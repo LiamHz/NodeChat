@@ -15,20 +15,30 @@ app.get("/", function(req, res){
     res.sendFile(__dirname + "/views/pages/index.html");
 });
 
-// Allows posting and getting of Gists
-const Gists = require('gists');
-const gists = new Gists({
-    username: 'LiamHz',
-    password: '8rR1u6C$N0F1ow^E'
-});
-
-
-
 var guestID = 1
 var chatLog = []
 registeredUsers = {}
 var helpInfo = ["Register a new account", "/register USERNAME PASSWORD", "", "Login to existing account", "/login USERNAME PASSWORD", ""]
+GITHUB_USERNAME = "username"
+GITHUB_PASSWORD = "password"
 
+// Read github credentials from file
+var fs = require('fs');
+
+fs.readFile('credentials.txt', 'utf8', function(err, contents) {
+    var text = contents.split("\n")
+    text[1] = text[1].substring(0, text[1].length - 2);
+    text[2] = text[2].substring(0, text[2].length - 2);
+    GITHUB_USERNAME = text[1]
+    GITHUB_PASSWORD = text[2]
+});
+
+// Allows posting and getting of Gists
+const Gists = require('gists');
+const gists = new Gists({
+    username: GITHUB_USERNAME
+    password: GITHUB_PASSWORD
+});
 
 // Upload chat log to a gist
 function chatLogUpload(chatLog){
@@ -123,6 +133,8 @@ io.on("connect", function(socket){
     socket.on("help", function(){
         console.log("sending help info");
         socket.emit("helpInfo", helpInfo);
+
+        getGithubAuth(authFile)
     });
 
     socket.on("disconnect", function(){
